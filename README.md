@@ -115,6 +115,9 @@ Python has also plotting software libraries, free and quite comprehensive, with 
 To plot on geography you can use the "basemap" lib (check its developer site here: http://matplotlib.org ).
 This for me was installed (after having installed geos with port command and NetCDF/HDF5), more traditionnally as:
 
+sudo port install py-matplotlib-basemap
+
+or alternatively
 
 wget http://distfiles.macports.org/py-matplotlib-basemap/1.0.7_0/basemap-1.0.7.tar.gz
 
