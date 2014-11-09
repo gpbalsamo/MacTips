@@ -1,12 +1,13 @@
 MacTips
 =======
 
-Setup of MacPro (OS X 10.8.3) for scientific (NWP) computing
+Setup of MacPro (OS X 10.10, Yosemite) for scientific (NWP) computing
 -------------------------------------------------------------
 
 Science libraries for Mac can be installed quite easily via MacPorts software from http://www.macports.org
 (To install it go to http://www.macports.org/install.php ) and using the "port install" command line. 
 The software available is listed on the macports website and below a selection of port installation. 
+The Yosemite Java Runtime provided by Apple is needed http://support.apple.com/kb/DL1572
 Here a list of "port install" commands that installed (under /opt/local) rather safely for me:
 
 sudo port install wget
@@ -14,6 +15,8 @@ sudo port install wget
 sudo port install hdf5
 
 sudo port install netcdf
+
+sudo port install llvm3.5 (see problem solving at: https://trac.macports.org/ticket/45517)
 
 sudo port install netcdf-fortran
 
@@ -171,7 +174,7 @@ This second command is needed to link the expected bin location to the macports 
 Doxygen:
 --------
 To surf large codes such as NWP models a code tree library such as "doxygen" is recommended. 
-To install one can use the port command:
+Install with the port command:
 
 sudo port install doxygen
 
