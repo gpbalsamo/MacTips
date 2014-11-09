@@ -1,13 +1,13 @@
 MacTips
 =======
 
-Setup of MacPro (OS X 10.10, Yosemite) for scientific (NWP) computing
+Setup of MacPro (OS X 10.10, Yosemite) for scientific computing in Earth system science 
 -------------------------------------------------------------
 
 Science libraries for Mac can be installed quite easily via MacPorts software from http://www.macports.org
 (To install it go to http://www.macports.org/install.php ) and using the "port install" command line. 
 The software available is listed on the macports website and below a selection of port installation. 
-The Yosemite Java Runtime provided by Apple is needed http://support.apple.com/kb/DL1572
+The Yosemite Java Runtime Environment provided by Apple is needed http://support.apple.com/kb/DL1572
 Here a list of "port install" commands that installed (under /opt/local) rather safely for me:
 
 sudo port install wget
@@ -40,12 +40,12 @@ Fortran:
 There are few exceptions (valid at this time, January 2013) such as the fortran compiler 
 which is obtained from http://hpc.sourceforge.net . 
 
-In my case the MLion (for Mac Os X 10.8.2) gcc4.8 is chosen as it has gfortran (with OpenMP):
+In case of MLion/Yosemite gcc4.8/gcc5.0 can be chosen as have gfortran (with OpenMP):
 
 
-wget http://prdownloads.sourceforge.net/hpc/gcc-mlion.tar.gz
+wget http://prdownloads.sourceforge.net/hpc/gcc-5.0-bin.tar.gz
 
-sudo tar -xvfz gcc-mlion.tar.gz -C /. 
+sudo tar -xvfz gcc-5.0-bin.tar.gz -C /. 
 
 
 This will install it under /usr/local
@@ -116,11 +116,11 @@ To plot on geography you can use the "basemap" lib (check its developer site her
 This for me was installed (after having installed geos with port command and NetCDF/HDF5), more traditionnally as:
 
 
-wget http://distfiles.macports.org/py-matplotlib-basemap/1.0.5_0/basemap-1.0.5.tar.gz
+wget http://distfiles.macports.org/py-matplotlib-basemap/1.0.7_0/basemap-1.0.7.tar.gz
 
-tar xvfz basemap-1.0.5.tar.gz
+tar xvfz basemap-1.0.7.tar.gz
 
-cd basemap-1.0.5
+cd basemap-1.0.7
 
 export GEOS_DIR=/opt/local/
 
