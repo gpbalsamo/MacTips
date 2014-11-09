@@ -42,6 +42,7 @@ sudo port install xv
 
 sudo port install gv
 
+---
 
 Fortran:
 --------
@@ -88,27 +89,24 @@ Test files with OpenMP and OpenMPI are compiled as follows:
 mpif90 mpihello.F90  ;  mpif90 -fopenmp mpiomp_hello.F90 
 
 
-Scientific and Numerical libraries in Python:
+Scientific and numerical libraries in python:
 ---------------------------------------------
-Python provides a collection of scientific and numerical software libraries that are easily installed via the port:
-
+Python provides a collection of scientific and numerical software libraries that are easily installed via the ports:
 
 sudo port install py-scipy
 
 sudo port install py-numpy
 
 
-Netcdf in Python:
--------
-
+Netcdf in python:
+-----------------
 for NetCDF4 the port is working fine
 
 sudo port install py-netcdf4
 
 
-Grib in Python:
+Grib in python:
 ---------------
-
 for Grib the port is working fine
 
 sudo port install py-pygrib
