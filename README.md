@@ -1,8 +1,8 @@
 MacTips
 =======
 
-Setup of MacPro (OS X 10.10, Yosemite) for scientific computing in Earth System Science 
----------------------------------------------------------------------------------------
+Setup of MacPro (OS X 10.10, Yosemite) for Computing in Earth System Science 
+----------------------------------------------------------------------------
 
 Science libraries for Mac can be installed quite easily via the MacPorts project from http://www.macports.org
 (To install it go to http://www.macports.org/install.php ) and use then the "port install" command line. 
