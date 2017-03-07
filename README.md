@@ -50,9 +50,9 @@ The fortran compiler can be also obtained from http://hpc.sourceforge.net .
 
 In case of MLion/Yosemite gcc4.8/gcc5.0 can be chosen as have gfortran (with OpenMP):
 
-wget http://prdownloads.sourceforge.net/hpc/gcc-5.0-bin.tar.gz
+wget http://prdownloads.sourceforge.net/hpc/gcc-6.3-bin.tar.gz
 
-sudo tar -xvfz gcc-5.0-bin.tar.gz -C /. 
+sudo tar -xvf gcc-6.3-bin.tar.gz -C /. 
 
 This will install it under /usr/local
 
