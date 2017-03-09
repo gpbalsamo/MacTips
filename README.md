@@ -12,10 +12,6 @@ Here a list of "port install" commands that installed (under /opt/local) rather 
 
 sudo port install wget
 
-sudo port install llvm3.5 (see problem solving at: https://trac.macports.org/ticket/45517)
-
-sudo port install gcc48
-
 sudo port install grib_api
 
 sudo port install hdf5
@@ -24,19 +20,13 @@ sudo port install netcdf
 
 sudo port install netcdf-fortran
 
-sudo port install ncview
+sudo port install ncview (problem solving at https://trac.macports.org/ticket/53583 )
 
 sudo port install nco +netcdf
 
 sudo port install cdo       
 
-sudo port install octave
-
 sudo port install xmgr
-
-sudo port install geos
-
-sudo port install ImageMagick
 
 sudo port install xv
 
