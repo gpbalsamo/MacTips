@@ -32,51 +32,9 @@ sudo port install xv
 
 sudo port install gv
 
+sudo port instal mpich
+
 ---
-
-Fortran:
---------
-The fortran compiler can be also obtained from http://hpc.sourceforge.net . 
-
-In case of MLion/Yosemite gcc4.8/gcc5.0 can be chosen as have gfortran (with OpenMP):
-
-wget http://prdownloads.sourceforge.net/hpc/gcc-6.3-bin.tar.gz
-
-sudo tar -xvf gcc-6.3-bin.tar.gz -C /. 
-
-This will install it under /usr/local
-
-The compilation of fortran code need few adjustments in the config file:
-
-CDFLIB =  -L/opt/local/lib -lnetcdff -fopenmp
-
-CFLAGS = -m64 -arch x86_64 ...
-
-FFLAGS = -c -m64 -arch x86_64 ...
-
-
-OpenMPI:
---------
-While OpenMP is standard and part of gcc/gfortran package, the MPI need to be installed and can be done via the port:
-
-sudo port install mpich
-
-OpenMPI is also free and a available here:
-
-wget http://www.open-mpi.org/software/ompi/v1.6/downloads/openmpi-1.6.3.tar.gz
-
-tar zxvf openmpi-1.6.3.tar.gz
-
-./configure --prefix=/usr/local
-
-make all
-
-sudo make install
-
-
-Test files with OpenMP and OpenMPI are compiled as follows:
-
-mpif90 mpihello.F90  ;  mpif90 -fopenmp mpiomp_hello.F90 
 
 
 Scientific and numerical libraries in python:
@@ -118,7 +76,6 @@ TexShop is a recommended front-end. For the actual LaTex library the "TexLive" d
 sudo port install texlive
 
 sudo ln -s /opt/local/bin /usr/texbin
-
 
 This second command is needed to link the expected bin location to the macports installation location.
 (if problems occur some instructions are available at: http://www.macfreek.nl/memory/LaTeX_installation_on_Mac )
