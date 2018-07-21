@@ -1,7 +1,7 @@
 MacTips
 =======
 
-Setup of MacPro (OS X 10.12, Sierra) for Computing in Earth System Science 
+Setup of MacPro (OS X 10.13, High Sierra) for Computing in Earth System Science 
 ----------------------------------------------------------------------------
 
 Science libraries for Mac can be installed quite easily via the MacPorts project from http://www.macports.org
@@ -67,6 +67,8 @@ To plot on geography you can use the "basemap" lib (check its developer site her
 This for me was installed (after having installed geos with port command and NetCDF/HDF5), more traditionnally as:
 
 sudo port install py-matplotlib-basemap
+
+sudo port install metview
 
 
 Latex:
