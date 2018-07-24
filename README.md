@@ -20,7 +20,7 @@ sudo port install netcdf
 
 sudo port install netcdf-fortran
 
-sudo port install ncview (problem solving at https://trac.macports.org/ticket/53583 )
+sudo port install ncview
 
 sudo port install nco +netcdf
 
