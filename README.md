@@ -68,6 +68,8 @@ This for me was installed (after having installed geos with port command and Net
 
 sudo port install py-matplotlib-basemap
 
+sudo port install grads
+
 sudo port install metview
 
 
