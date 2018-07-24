@@ -5,8 +5,7 @@ Setup of MacPro (OS X 10.13, High Sierra) for Computing in Earth System Science
 ----------------------------------------------------------------------------
 
 Science libraries for Mac can be installed quite easily via the MacPorts project from http://www.macports.org
-(To install it go to http://www.macports.org/install.php choose the Sierra version) and use then the "port install" command line. 
-The software available is listed on the macports website and below a selection of ports installation. 
+(To install it go to http://www.macports.org/install.php choose the Sierra or High Sierra version) and use then the "port install" command line. The software available is listed on the macports website and below a selection of ports installation. 
 The Yosemite Java Runtime Environment provided by Apple is needed http://support.apple.com/kb/DL1572 . 
 Here a list of "port install" commands that installed (under /opt/local) rather safely for me:
 
