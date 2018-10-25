@@ -34,9 +34,9 @@ sudo port install gv
 sudo port instal mpich
 
 ---
-Patch needed
-cd /opt/local/bin
-sudo mv ./as ./as-broken
+Patch needed: 
+cd /opt/local/bin ; 
+sudo mv ./as ./as-broken ; 
 sudo ln -s /usr/bin/as ./as
 
 
