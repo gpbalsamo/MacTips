@@ -11,7 +11,7 @@ Here a list of "port install" commands that installed (under /opt/local) rather 
 
 sudo port install wget
 
-sudo port install grib_api
+sudo port install eccodes
 
 sudo port install hdf5
 
@@ -34,6 +34,10 @@ sudo port install gv
 sudo port instal mpich
 
 ---
+Patch needed
+cd /opt/local/bin
+sudo mv ./as ./as-broken
+sudo ln -s /usr/bin/as ./as
 
 
 Scientific and numerical libraries in python:
@@ -57,6 +61,12 @@ Grib in python:
 for Grib the port is working fine
 
 sudo port install py-pygrib
+
+Code Management:
+----------------
+for large code management and build the FCM software provided by the UK MetOffice is recommended as for instance used for OpenIFS
+https://www.metoffice.gov.uk/research/collaboration/fcm
+https://confluence.ecmwf.int/display/OIFS/OpenIFS+Home
 
 
 Plotting with python:
