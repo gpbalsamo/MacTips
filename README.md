@@ -1,7 +1,7 @@
 MacTips
 =======
 
-Setup of MacPro (OS X 10.14, Mojave) for Computing in Earth System Science 
+Setup of MacPro (OS X 10.15, Catalina) for Computing in Earth System Science 
 ----------------------------------------------------------------------------
 
 Science libraries for Mac can be installed quite easily via the MacPorts project from http://www.macports.org
