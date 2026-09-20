@@ -1,0 +1,19 @@
+# Local configuration and secrets — keep real values out of the repository
+config/*.local.yaml
+.env
+.env.*
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local agent output
+agent_runs/
+*.jsonl
+
+# macOS
+.DS_Store

@@ -1,0 +1,19 @@
+# Example paths for a MacTips setup. Generic placeholders only.
+#
+# Copy to config/paths.local.yaml (git-ignored) and replace the placeholders
+# with your own locations. Never commit real paths, usernames, hostnames,
+# credentials or tokens.
+
+work_dir: /path/to/work                       # parent directory for checkouts and environments
+
+python_venv: /path/to/work/science_venv       # docs/02
+ecland_venv: /path/to/work/ecland_venv        # docs/03
+
+repositories:
+  ecland: /path/to/work/ecland                # https://github.com/ecmwf-ifs/ecland
+  ecland4u: /path/to/work/ecLand4U
+  plumber2_ecland: /path/to/work/plumber2-ecland
+  liaise_ecland: /path/to/work/liaise-ecland
+  wfde5_ecland: /path/to/work/wfde5-ecland
+
+output_dir: /path/to/work/agent_runs          # benchmark records, logs, escalation packages

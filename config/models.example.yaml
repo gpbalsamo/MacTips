@@ -1,0 +1,28 @@
+# Example model and policy configuration for a MacTips local agent.
+#
+# Copy to config/models.local.yaml (git-ignored) and edit. Do not put API keys
+# or tokens in this file; supply them through your tool's own credential store
+# or environment, never through the repository.
+#
+# There is no default model on purpose: choose one by benchmarking it on real
+# tasks (docs/04-local-llm-with-ollama.md, docs/07-ecland-benchmark-cascade.md).
+
+local:
+  provider: ollama          # or: mlx
+  model: CHANGE_ME          # e.g. a model name shown by `ollama list`
+  context: 32768            # tokens; larger contexts cost more memory
+
+frontier:
+  provider: CHANGE_ME       # a hosted coding agent / model service
+  purpose:
+    - escalation
+    - difficult_debugging
+    - review
+
+policy:
+  max_local_retries: 2      # matches the retry rule in AGENTS.md
+  require_confirmation_for:
+    - destructive_git
+    - large_download
+    - hpc_submission
+    - long_simulation
