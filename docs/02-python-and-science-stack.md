@@ -74,7 +74,7 @@ python -m pip install cartopy rasterio geopandas   # geospatial; may need system
   [01](01-mac-scientific-setup.md) first.
 - **`PYTHONNOUSERSITE=1`** stops Python importing packages from
   `~/Library/Python/...`, which otherwise can silently shadow a venv. It is
-  used in the ecLand build for exactly that reason.
+  also set in the ecLand build environment ([03](03-ecland-on-apple-silicon.md)).
 - **Pin what matters.** For results you intend to publish or compare, keep
   `requirements.txt` (or a lock file) in version control with the analysis.
 - **ECMWF data.** ecCodes and `cfgrib` bridge GRIB into xarray; they need the

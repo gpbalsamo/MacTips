@@ -10,9 +10,9 @@ source of truth, and this page should not diverge from it.
 
 Two labels are used throughout:
 
-- **VERIFIED WORKFLOW** — the procedure documented in ecLand4U, where it was
-  run by its author on a Mac. It was **not re-run** while writing this page,
-  so re-check against ecLand4U if you hit a problem.
+- **VERIFIED WORKFLOW** — the procedure that ecLand4U documents as the working
+  Mac workflow. It was **not re-run** while writing this page (which was
+  drafted on a non-Mac host), so re-check against ecLand4U if you hit a problem.
 - **MACHINE-DEPENDENT ADVICE** — reasonable guidance that may need adapting to
   your macOS version, Homebrew state, compilers or ecLand revision. Treat it as
   a hint, not a guarantee.

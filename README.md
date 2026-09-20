@@ -231,7 +231,8 @@ SCALE ONLY WHEN JUSTIFIED.
 
 - The LLM chooses actions. Tools perform actions. Validators decide PASS/FAIL.
 - Plausible-looking output is not scientific success.
-- Claims in these guides are marked as verified only when they have been run.
+- A workflow is treated as working only if it has actually been run and
+  validated; the guides say so where that is not yet the case.
 
 ## Documentation index
 
