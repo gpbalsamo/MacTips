@@ -13,6 +13,8 @@ sysctl -n hw.memsize
 sysctl -n hw.ncpu
 ```
 
+On Linux / WSL2 (Profile C): `nproc`, `free -h`, `nvidia-smi`.
+
 ## Profile A — Developer laptop
 
 Example: **Apple M3, 16 GB unified memory**
@@ -68,6 +70,33 @@ It is **not** intended to replace:
 Those belong on ECMWF HPC, and only when the smaller stages of the cascade
 ([07](07-ecland-benchmark-cascade.md)) have justified the cost.
 
+## Profile C — RTX node (Linux / WSL2)
+
+Example: **Windows PC, NVIDIA GeForce RTX 5060 Ti 16 GB VRAM, Ubuntu 24.04
+under WSL2, 13 GB RAM given to WSL, 1 TB SSD**
+
+Setup: [11 — RTX node](11-rtx-linux-node.md).
+
+Suitable for:
+
+- persistent Ollama service with CUDA
+- SMALL-tier models, and ~14B models at 4-bit, fully on the GPU
+- local agent orchestration and validation, as for Profile B
+- building and testing ecLand with the Ubuntu toolchain
+- **small GPU training and fine-tuning** that fits in 16 GB VRAM (e.g. ML
+  emulators on regional or coarse grids)
+
+Differences from Profile B:
+
+- VRAM is separate from system RAM. 16 GB of VRAM holds less than 64 GB of
+  unified memory, so MEDIUM-tier models mostly split between GPU and CPU and
+  slow down. Check with `ollama ps`.
+- CUDA gives access to the mainstream ML stack (PyTorch, and frameworks built
+  on it), which is why this profile includes small training.
+
+Still **not** a replacement for production training, production Earth-system
+simulations or high-resolution HPC workflows.
+
 ## Choosing
 
 | Question | Answer |
@@ -75,4 +104,5 @@ Those belong on ECMWF HPC, and only when the smaller stages of the cascade
 | Just want a working scientific Mac? | Any Apple-silicon Mac; follow [01](01-mac-scientific-setup.md)–[03](03-ecland-on-apple-silicon.md) |
 | Want to try local LLMs and agents? | Profile A is enough to learn the workflow |
 | Want a serious local repository agent? | Profile B class memory is where MEDIUM-tier models become practical, to be verified per model |
-| Need to run production simulations or train models? | Use HPC / GPU resources |
+| Want CUDA, or small training / fine-tuning next to the agent? | Profile C (RTX node), within its VRAM |
+| Need to run production simulations or train large models? | Use HPC / GPU resources |

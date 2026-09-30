@@ -37,7 +37,9 @@ Measure on your machine with `ollama ps`.
 command line and a local HTTP API (by default on `localhost` only).
 
 Install from <https://ollama.com/download> (a Homebrew package also exists;
-check `brew info ollama`), then:
+check `brew info ollama`). On a Linux / WSL2 node with an NVIDIA GPU, see
+[11](11-rtx-linux-node.md): there the model must fit in GPU **VRAM**, which is
+separate from system RAM. Then:
 
 ```bash
 ollama list              # models downloaded to this machine

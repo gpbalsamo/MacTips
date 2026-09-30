@@ -50,9 +50,11 @@ The ecLand ladder runs from cheap to expensive: build + `ctest` → one
 [WFDE5](https://github.com/gpbalsamo/wfde5-ecland) test → CaMa-Flood → HPC. Build
 steps come from [ecLand4U](https://github.com/gpbalsamo/ecLand4U).
 
-Hardware examples (laptop vs. Mac mini node) are in
-[10 hardware profiles](docs/10-hardware-profiles.md). Neither replaces GPU
-training or production HPC.
+Hardware examples (laptop, Mac mini node, and a Linux/WSL2 RTX node for CUDA
+inference and small training) are in
+[10 hardware profiles](docs/10-hardware-profiles.md); RTX node setup is in
+[11](docs/11-rtx-linux-node.md). None replaces large-scale training or
+production HPC.
 
 ## Safety
 

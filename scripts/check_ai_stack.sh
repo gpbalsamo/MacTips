@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 # check_ai_stack.sh — read-only check of the local AI tooling.
 #
-# Reports whether Ollama is installed and responding, which models are
-# downloaded and loaded, and which frontier coding agents are on PATH.
+# Reports whether an NVIDIA GPU is visible (Linux / WSL2 nodes), whether
+# Ollama is installed and responding, which models are downloaded and loaded,
+# and which frontier coding agents are on PATH.
 #
 # It does NOT log in, authenticate, change accounts, pull models, or start
-# services. It only runs `--version`, `ollama list` and `ollama ps`.
+# services. It only runs `--version`, `nvidia-smi` queries, `ollama list`
+# and `ollama ps`.
 # Compatible with the bash 3.2 shipped with macOS.
 #
 # Status meanings:
@@ -13,9 +15,10 @@
 #   MISSING   a required tool was not found
 #   WARN      installed but not responding as expected
 #   OPTIONAL  an optional tool was not found
+#   info      informational only
 #
-# Exit status: 0 if Ollama is installed, 1 otherwise. Frontier agents are
-# optional and never affect the exit status.
+# Exit status: 0 if Ollama is installed, 1 otherwise. The GPU check and
+# frontier agents are informational and never affect the exit status.
 
 set -u
 
@@ -24,6 +27,31 @@ FAIL=0
 report() {
     printf '%-9s %-10s %s\n' "$1" "$2" "$3"
 }
+
+echo "== GPU =="
+# On WSL2 nvidia-smi lives in /usr/lib/wsl/lib, which may not be on PATH.
+SMI=""
+if command -v nvidia-smi >/dev/null 2>&1; then
+    SMI=nvidia-smi
+elif [ -x /usr/lib/wsl/lib/nvidia-smi ]; then
+    SMI=/usr/lib/wsl/lib/nvidia-smi
+fi
+if [ -n "$SMI" ]; then
+    if out=$("$SMI" --query-gpu=name,memory.total,driver_version,compute_cap \
+            --format=csv,noheader 2>&1); then
+        printf '%s\n' "$out" | while IFS= read -r line; do
+            report PASS nvidia "$line"
+        done
+    else
+        report WARN nvidia "nvidia-smi found but failed"
+        printf '%s\n' "$out" | head -n 3 | sed 's/^/          /'
+    fi
+elif [ "$(uname -s)" = Darwin ]; then
+    report info gpu "macOS: Apple GPU via Metal (no NVIDIA check)"
+else
+    report OPTIONAL nvidia "nvidia-smi not found (no NVIDIA GPU, or driver not visible)"
+fi
+echo
 
 echo "== Local inference: Ollama =="
 if command -v ollama >/dev/null 2>&1; then
