@@ -1,0 +1,2 @@
++ export OMP_NUM_THREADS=8
++ mpirun -np 1 /path/to/work/ecland/build/bin/ecland-master-dp

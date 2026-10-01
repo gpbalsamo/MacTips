@@ -1,0 +1,45 @@
+[HOST:31507] mca: base: components_register: registering framework ess components
+[HOST:31507] mca: base: components_register: found loaded component singleton
+[HOST:31507] mca: base: components_register: component singleton register function successful
+[HOST:31507] mca: base: components_register: found loaded component env
+[HOST:31507] mca: base: components_register: component env has no register or open function
+[HOST:31507] mca: base: components_register: found loaded component slurm
+[HOST:31507] mca: base: components_register: component slurm has no register or open function
+[HOST:31507] mca: base: components_register: found loaded component tool
+[HOST:31507] mca: base: components_register: component tool register function successful
+[HOST:31507] mca: base: components_register: found loaded component pmi
+[HOST:31507] mca: base: components_register: component pmi has no register or open function
+[HOST:31507] mca: base: components_register: found loaded component hnp
+[HOST:31507] mca: base: components_register: component hnp has no register or open function
+[HOST:31507] mca: base: components_open: opening ess components
+[HOST:31507] mca: base: components_open: found loaded component singleton
+[HOST:31507] mca: base: components_open: component singleton open function successful
+[HOST:31507] mca: base: components_open: found loaded component env
+[HOST:31507] mca: base: components_open: component env open function successful
+[HOST:31507] mca: base: components_open: found loaded component slurm
+[HOST:31507] mca: base: components_open: component slurm open function successful
+[HOST:31507] mca: base: components_open: found loaded component tool
+[HOST:31507] mca: base: components_open: component tool open function successful
+[HOST:31507] mca: base: components_open: found loaded component pmi
+[HOST:31507] mca: base: components_open: component pmi open function successful
+[HOST:31507] mca: base: components_open: found loaded component hnp
+[HOST:31507] mca: base: components_open: component hnp open function successful
+[HOST:31507] mca:base:select: Auto-selecting ess components
+[HOST:31507] mca:base:select:(  ess) Querying component [singleton]
+[HOST:31507] mca:base:select:(  ess) Querying component [env]
+[HOST:31507] mca:base:select:(  ess) Querying component [slurm]
+[HOST:31507] mca:base:select:(  ess) Querying component [tool]
+[HOST:31507] mca:base:select:(  ess) Querying component [pmi]
+[HOST:31507] mca:base:select:(  ess) Querying component [hnp]
+[HOST:31507] mca:base:select:(  ess) Query of component [hnp] set priority to 100
+[HOST:31507] mca:base:select:(  ess) Selected component [hnp]
+[HOST:31507] mca: base: close: component singleton closed
+[HOST:31507] mca: base: close: unloading component singleton
+[HOST:31507] mca: base: close: component env closed
+[HOST:31507] mca: base: close: unloading component env
+[HOST:31507] mca: base: close: component slurm closed
+[HOST:31507] mca: base: close: unloading component slurm
+[HOST:31507] mca: base: close: component tool closed
+[HOST:31507] mca: base: close: unloading component tool
+[HOST:31507] mca: base: close: component pmi closed
+[HOST:31507] mca: base: close: unloading component pmi

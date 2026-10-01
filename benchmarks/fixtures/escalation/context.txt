@@ -1,0 +1,16 @@
+Repository: ecland (a personal fork of the upstream ECMWF ecLand code).
+
+$ git log --oneline -3
+ec95cc7 Cap frozen soil fraction to allow macropore permeability in surface runoff
+c69a0b0 Delete BVOC flux diagnostics code from the surface energy flux
+87021f4 Merge pull request #55 from awnawab/naan-bounds-fixes
+
+$ git diff --stat 87021f4 HEAD
+ src/surf/module/srfwexc_vg_mod.F90  | 38 +++++++++++++++++++------------------
+ src/surf/offline/driver/wrtdcdf.F90 | 34 ---------------------------------
+ 2 files changed, 20 insertions(+), 52 deletions(-)
+
+On the same machine, with the same toolchain and test data, a build of
+upstream commit 87021f4 PASSES both tests (ecland_test_insitu_US-Ha1_1991-1996_dp
+and ecland_test_2D_EU-001_20220101-20220102_dp).
+The test control (reference) files in the fork were not changed by ec95cc7 or c69a0b0.

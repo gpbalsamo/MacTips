@@ -1,0 +1,147 @@
+    Start 239: ecland_test_insitu_US-Ha1_1991-1996_dp
+1/2 Test #239: ecland_test_insitu_US-Ha1_1991-1996_dp .......***Failed   66.59 sec
+SETUP_FILE: /path/to/work/ecland/tests/insitu_US-Ha1_1991-1996/setup
+FORCING_TYPE  : insitu
+FORCING_DIR   : tests/2.0/insitu_US-Ha1_1991-1996
+SITE          : US-Ha1_1991-1996
+INICLM_DIR    : tests/2.0/insitu_US-Ha1_1991-1996
+NAMELIST      : /path/to/work/ecland/tests/insitu_US-Ha1_1991-1996/namelist
+WORK_DIR      : /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/work
+OUTPUT_DIR    : /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/output
+INPUT_DIR     : /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input
+ECLAND_MASTER : /path/to/work/ecland/build/bin/ecland-master-dp
+File is available in LOCATION: /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input/met_insituHT_US-Ha1_1991-1996.nc
+File is available in LOCATION: /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input/surfinit_US-Ha1_1991-1996.nc
+File is available in LOCATION: /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input/surfclim_US-Ha1_1991-1996.nc
+STA: US-Ha1_1991-1996
+WORKDIR: /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/work
+OUTPUTDIR: /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/output
+FORCINGDIR: /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input
+INICLMDIR: /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input
+FORCINGTYPE: insitu
+NAMELIST: /path/to/work/ecland/tests/insitu_US-Ha1_1991-1996/namelist
+RUN CMF: false
+NLOOP: 1
+total 80K
+drwxrwxr-x 3 pad pad 4.0K Sep 30 19:40 ..
+-rw-rw-r-- 1 pad pad 8.4K Sep 30 19:40 input
+lrwxrwxrwx 1 pad pad  101 Sep 30 19:40 forcing -> /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input/met_insituHT_US-Ha1_1991-1996.nc
+-rw-rw-r-- 1 pad pad  22K Sep 30 19:40 soilinit
+drwxrwxr-x 2 pad pad 4.0K Sep 30 19:40 .
+-rw-rw-r-- 1 pad pad  30K Sep 30 19:40 surfclim
+---------------------------------------------
+Executable built:  /path/to/work/ecland/build/bin/ecland-master-dp
+Forcing:           /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input/met_insituHT_US-Ha1_1991-1996.nc
+Rundir:            /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/work/RUN/US-Ha1_1991-1996
+RLOOP / NLOOP:     1 / 1
+---------------------------------------------
+*******************************************************************************
+ECLAND START
+
+
+*******************************************************************************
+
+
+	 Running + export OMP_NUM_THREADS=8
+
+---------------------------------------------
+Output, logs and namelist in: /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/output/US-Ha1_1991-1996
+
+Validating SITE=US-Ha1_1991-1996, NLOOP=1, VARS=[SoilTemp SoilMois AvgSurfT], CONTROL=/path/to/work/ecland/tests/insitu_US-Ha1_1991-1996/control/US-Ha1_1991-1996/dp
+Validating SoilTemp with relative tolerance 5.e-5
+    reference  :  [['          2.7278117129817002e+02', '          2.7278117129817002e+02', '          2.7278117129817002e+02'], ['          2.7277660362063818e+02', '          2.7277660362063818e+02', '          2.7277660362063818e+02'], ['          2.7340128577440009e+02', '          2.7340128577440009e+02', '          2.7340128577440009e+02'], ['          2.7595152434175333e+02', '          2.7595152434175333e+02', '          2.7595152434175333e+02']]
+    experiment :  [['          2.7278679011118248e+02', '          2.7278679011118248e+02', '          2.7278679011118248e+02'], ['          2.7278324464658323e+02', '          2.7278324464658323e+02', '          2.7278324464658323e+02'], ['          2.7339527829378380e+02', '          2.7339527829378380e+02', '          2.7339527829378380e+02'], ['          2.7585597289197472e+02', '          2.7585597289197472e+02', '          2.7585597289197472e+02']]
+    rel_diff   :  [['          2.0598243587418480e-05', '          2.0598243587418480e-05', '          2.0598243587418480e-05'], ['          2.4346024757605376e-05', '          2.4346024757605376e-05', '          2.4346024757605376e-05'], ['          2.1973124959065957e-05', '          2.1973124959065957e-05', '          2.1973124959065957e-05'], ['          3.4626172117199500e-04', '          3.4626172117199500e-04', '          3.4626172117199500e-04']]
+    FAILED
+Validating SoilMois with relative tolerance 5.e-5
+    reference  :  [['          1.9975039516214999e+01', '          1.9975039516214700e+01', '          1.9975039516214700e+01'], ['          5.7355781487883561e+01', '          5.7355781487883561e+01', '          5.7355781487883561e+01'], ['          1.8148073459084620e+02', '          1.8148073459084620e+02', '          1.8148073459084620e+02'], ['          5.2198859052742114e+02', '          5.2198859052742114e+02', '          5.2198859052742114e+02']]
+    experiment :  [['          1.8523517655152439e+01', '          1.8523517655152439e+01', '          1.8523517655152439e+01'], ['          5.7268128471482498e+01', '          5.7268128471482498e+01', '          5.7268128471482498e+01'], ['          1.9874347470718959e+02', '          1.9874347470718959e+02', '          1.9874347470718959e+02'], ['          5.4269087350984955e+02', '          5.4269087350984955e+02', '          5.4269087350984955e+02']]
+    rel_diff   :  [['          7.2666782956012060e-02', '          7.2666782955998210e-02', '          7.2666782955998210e-02'], ['          1.5282333206388253e-03', '          1.5282333206388253e-03', '          1.5282333206388253e-03'], ['          9.5121612524121435e-02', '          9.5121612524121435e-02', '          9.5121612524121435e-02'], ['          3.9660412810001600e-02', '          3.9660412810001600e-02', '          3.9660412810001600e-02']]
+    FAILED
+Validating AvgSurfT with relative tolerance 5.e-5
+    reference  :  [['          2.5435168028999601e+02', '          2.5435168028999601e+02', '          2.5435168028999601e+02']]
+    experiment :  [['          2.5435170312575511e+02', '          2.5435170312575511e+02', '          2.5435170312575511e+02']]
+    rel_diff   :  [['          8.9780256497501363e-08', '          8.9780256497501363e-08', '          8.9780256497501363e-08']]
+    SUCCESS
+Validation FAILED
+
+    Start 240: ecland_test_2D_EU-001_20220101-20220102_dp
+2/2 Test #240: ecland_test_2D_EU-001_20220101-20220102_dp ...***Failed   99.44 sec
+SETUP_FILE: /path/to/work/ecland/tests/2D_EU-001_20220101-20220102/setup
+FORCING_TYPE  : 2D
+FORCING_DIR   : tests/2.0/2D_EU-001_20220101-20220102
+SITE          : EU-001_20220101-20220102
+INICLM_DIR    : tests/2.0/2D_EU-001_20220101-20220102
+NAMELIST      : /path/to/work/ecland/tests/2D_EU-001_20220101-20220102/namelist
+WORK_DIR      : /path/to/work/ecland/build/ecland/tests/2D_EU-001_20220101-20220102_dp/work
+OUTPUT_DIR    : /path/to/work/ecland/build/ecland/tests/2D_EU-001_20220101-20220102_dp/output
+INPUT_DIR     : /path/to/work/ecland/build/ecland/tests/2D_EU-001_20220101-20220102_dp/input
+ECLAND_MASTER : /path/to/work/ecland/build/bin/ecland-master-dp
+File is available in LOCATION: /path/to/work/ecland/build/ecland/tests/2D_EU-001_20220101-20220102_dp/input/met_2DHT_EU-001_20220101-20220102.nc
+File is available in LOCATION: /path/to/work/ecland/build/ecland/tests/2D_EU-001_20220101-20220102_dp/input/surfinit_EU-001_20220101-20220102.nc
+File is available in LOCATION: /path/to/work/ecland/build/ecland/tests/2D_EU-001_20220101-20220102_dp/input/surfclim_EU-001_20220101-20220102.nc
+STA: EU-001_20220101-20220102
+WORKDIR: /path/to/work/ecland/build/ecland/tests/2D_EU-001_20220101-20220102_dp/work
+OUTPUTDIR: /path/to/work/ecland/build/ecland/tests/2D_EU-001_20220101-20220102_dp/output
+FORCINGDIR: /path/to/work/ecland/build/ecland/tests/2D_EU-001_20220101-20220102_dp/input
+INICLMDIR: /path/to/work/ecland/build/ecland/tests/2D_EU-001_20220101-20220102_dp/input
+FORCINGTYPE: 2D
+NAMELIST: /path/to/work/ecland/tests/2D_EU-001_20220101-20220102/namelist
+RUN CMF: false
+NLOOP: 1
+total 2.2M
+drwxrwxr-x 3 pad pad 4.0K Sep 30 19:41 ..
+-rw-rw-r-- 1 pad pad 8.4K Sep 30 19:41 input
+lrwxrwxrwx 1 pad pad  109 Sep 30 19:41 forcing -> /path/to/work/ecland/build/ecland/tests/2D_EU-001_20220101-20220102_dp/input/met_2DHT_EU-001_20220101-20220102.nc
+-rw-rw-r-- 1 pad pad 549K Sep 30 19:41 soilinit
+drwxrwxr-x 2 pad pad 4.0K Sep 30 19:41 .
+-rw-rw-r-- 1 pad pad 1.6M Sep 30 19:41 surfclim
+---------------------------------------------
+Executable built:  /path/to/work/ecland/build/bin/ecland-master-dp
+Forcing:           /path/to/work/ecland/build/ecland/tests/2D_EU-001_20220101-20220102_dp/input/met_2DHT_EU-001_20220101-20220102.nc
+Rundir:            /path/to/work/ecland/build/ecland/tests/2D_EU-001_20220101-20220102_dp/work/RUN/EU-001_20220101-20220102
+RLOOP / NLOOP:     1 / 1
+---------------------------------------------
+*******************************************************************************
+ECLAND START
+
+
+*******************************************************************************
+
+
+	 Running + export OMP_NUM_THREADS=8
+
+---------------------------------------------
+Output, logs and namelist in: /path/to/work/ecland/build/ecland/tests/2D_EU-001_20220101-20220102_dp/output/EU-001_20220101-20220102
+
+Validating SITE=EU-001_20220101-20220102, NLOOP=1, VARS=[SoilTemp SoilMois AvgSurfT], CONTROL=/path/to/work/ecland/tests/2D_EU-001_20220101-20220102/control/EU-001_20220101-20220102/dp
+Validating SoilTemp with relative tolerance 1.e-8
+    reference  :  [['          2.7711327260189171e+02', '          2.6678373921475458e+02', '          2.8714829481652959e+02'], ['          2.7756333850341088e+02', '          2.6747105983409602e+02', '          2.8918132480400402e+02'], ['          2.7821346370129879e+02', '          2.6961186384907450e+02', '          2.9045886115335247e+02'], ['          2.8148938431694251e+02', '          2.7314999999999998e+02', '          2.9393117387016048e+02']]
+    experiment :  [['          2.7711348923082642e+02', '          2.6678734412525978e+02', '          2.8714829481652970e+02'], ['          2.7756392605062513e+02', '          2.6748420920932642e+02', '          2.8918132480400402e+02'], ['          2.7821341494982647e+02', '          2.6961276499517339e+02', '          2.9045886115335247e+02'], ['          2.8148937498513612e+02', '          2.7314999999999998e+02', '          2.9393117387016048e+02']]
+    rel_diff   :  [['          7.8173424417662669e-07', '          1.3512482116839529e-05', '          3.9591681292850807e-16'], ['          2.1168041046775580e-06', '          4.9161861618054349e-05', '          0.0000000000000000e+00'], ['          1.7523045675733399e-07', '          3.3423829576049144e-06', '          0.0000000000000000e+00'], ['          3.3151539282718958e-08', '          0.0000000000000000e+00', '          0.0000000000000000e+00']]
+    FAILED
+Validating SoilMois with relative tolerance 1.e-8
+    reference  :  [['          2.5111586777448078e+01', '          6.9999998435378086e-01', '          5.3619999999999997e+01'], ['          7.3702048069080135e+01', '          2.0999999530613418e+00', '          1.6086000000000001e+02'], ['          2.3039745174794109e+02', '          7.1999998390674591e+00', '          5.4250080035676558e+02'], ['          5.7067101310815735e+02', '          1.8899999577552080e+01', '          1.3924318445164679e+03']]
+    experiment :  [['          2.4909116563966531e+01', '          6.9999998435378086e-01', '          5.3619999999999997e+01'], ['          7.3870747014437384e+01', '          2.0999999530613418e+00', '          1.6086000000000001e+02'], ['          2.3048717752891710e+02', '          7.1999998390674591e+00', '          5.4250080035676660e+02'], ['          5.7067373575946067e+02', '          1.8899999577552080e+01', '          1.3924318445164679e+03']]
+    rel_diff   :  [['          8.0628203735567654e-03', '          0.0000000000000000e+00', '          0.0000000000000000e+00'], ['          2.2889315802883752e-03', '          0.0000000000000000e+00', '          0.0000000000000000e+00'], ['          3.8943912050803486e-04', '          0.0000000000000000e+00', '          1.8860461382207509e-15'], ['          4.7709647779141715e-06', '          0.0000000000000000e+00', '          0.0000000000000000e+00']]
+    FAILED
+Validating AvgSurfT with relative tolerance 1.e-8
+    reference  :  [['          2.7586665811663698e+02', '          2.5363945571726509e+02', '          2.8590844919219029e+02']]
+    experiment :  [['          2.7586668922473439e+02', '          2.5363945571726521e+02', '          2.8590844919219029e+02']]
+    rel_diff   :  [['          1.1276497716432411e-07', '          4.4822221132797290e-16', '          0.0000000000000000e+00']]
+    FAILED
+Validation FAILED
+
+
+0% tests passed, 2 tests failed out of 2
+
+Label Time Summary:
+ecland    = 166.04 sec*proc (2 tests)
+script    = 166.04 sec*proc (2 tests)
+
+Total Test time (real) = 166.05 sec
+
+The following tests FAILED:
+	239 - ecland_test_insitu_US-Ha1_1991-1996_dp (Failed)
+	240 - ecland_test_2D_EU-001_20220101-20220102_dp (Failed)
+Errors while running CTest

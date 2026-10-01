@@ -1,0 +1,82 @@
+== ctest
+Test project /path/to/work/ecland/build
+      Start 239: ecland_test_insitu_US-Ha1_1991-1996_dp
+ 1/10 Test #239: ecland_test_insitu_US-Ha1_1991-1996_dp .........***Timeout 1500.06 sec
+SETUP_FILE: /path/to/work/ecland/tests/insitu_US-Ha1_1991-1996/setup
+FORCING_TYPE  : insitu
+FORCING_DIR   : tests/2.0/insitu_US-Ha1_1991-1996
+SITE          : US-Ha1_1991-1996
+INICLM_DIR    : tests/2.0/insitu_US-Ha1_1991-1996
+NAMELIST      : /path/to/work/ecland/tests/insitu_US-Ha1_1991-1996/namelist
+WORK_DIR      : /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/work
+OUTPUT_DIR    : /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/output
+INPUT_DIR     : /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input
+ECLAND_MASTER : /path/to/work/ecland/build/bin/ecland-master-dp
++ mkdir -p /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/work
++ mkdir -p /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/output
++ mkdir -p /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input
++ /path/to/work/ecland/build/share/ecland/scripts/ecland_retrieve.sh tests/2.0/insitu_US-Ha1_1991-1996/met_insituHT_US-Ha1_1991-1996.nc /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input/met_insituHT_US-Ha1_1991-1996.nc
+Downloading from URL: https://sites.ecmwf.int/repository/ecland/tests/2.0/insitu_US-Ha1_1991-1996/met_insituHT_US-Ha1_1991-1996.nc
++ curl -L -C - https://sites.ecmwf.int/repository/ecland/tests/2.0/insitu_US-Ha1_1991-1996/met_insituHT_US-Ha1_1991-1996.nc --output met_insituHT_US-Ha1_1991-1996.nc.download
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0 21.5M    0 54478    0     0  85410      0  0:04:24 --:--:--  0:04:24 85388  3 21.5M    3  684k    0     0   413k      0  0:00:53  0:00:01  0:00:52  412k 11 21.5M   11 2567k    0     0   974k      0  0:00:22  0:00:02  0:00:20  974k 22 21.5M   22 4956k    0     0  1353k      0  0:00:16  0:00:03  0:00:13 1353k 33 21.5M   33 7309k    0     0  1573k      0  0:00:14  0:00:04  0:00:10 1573k 42 21.5M   42 9297k    0     0  1646k      0  0:00:13  0:00:05  0:00:08 1846k 50 21.5M   50 10.7M    0     0  1664k      0  0:00:13  0:00:06  0:00:07 2079k 59 21.5M   59 12.7M    0     0  1713k      0  0:00:12  0:00:07  0:00:05 2102k 69 21.5M   69 14.9M    0     0  1765k      0  0:00:12  0:00:08  0:00:04 2067k 79 21.5M   79 17.0M    0     0  1814k      0  0:00:12  0:00:09  0:00:03 2038k 88 21.5M   88 19.1M    0     0  1839k      0  0:00:11  0:00:10  0:00:01 2056k100 21.5M  100 21.5M    0     0  1910k      0  0:00:11  0:00:11 --:--:-- 2244k
++ mv met_insituHT_US-Ha1_1991-1996.nc.download met_insituHT_US-Ha1_1991-1996.nc
+Download completed
+File is available in LOCATION: /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input/met_insituHT_US-Ha1_1991-1996.nc
++ /path/to/work/ecland/build/share/ecland/scripts/ecland_retrieve.sh tests/2.0/insitu_US-Ha1_1991-1996/surfinit_US-Ha1_1991-1996.nc /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input/surfinit_US-Ha1_1991-1996.nc
+Downloading from URL: https://sites.ecmwf.int/repository/ecland/tests/2.0/insitu_US-Ha1_1991-1996/surfinit_US-Ha1_1991-1996.nc
++ curl -L -C - https://sites.ecmwf.int/repository/ecland/tests/2.0/insitu_US-Ha1_1991-1996/surfinit_US-Ha1_1991-1996.nc --output surfinit_US-Ha1_1991-1996.nc.download
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100 22266  100 22266    0     0  54748      0 --:--:-- --:--:-- --:--:-- 54842
++ mv surfinit_US-Ha1_1991-1996.nc.download surfinit_US-Ha1_1991-1996.nc
+Download completed
+File is available in LOCATION: /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input/surfinit_US-Ha1_1991-1996.nc
++ /path/to/work/ecland/build/share/ecland/scripts/ecland_retrieve.sh tests/2.0/insitu_US-Ha1_1991-1996/surfclim_US-Ha1_1991-1996.nc /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input/surfclim_US-Ha1_1991-1996.nc
+Downloading from URL: https://sites.ecmwf.int/repository/ecland/tests/2.0/insitu_US-Ha1_1991-1996/surfclim_US-Ha1_1991-1996.nc
++ curl -L -C - https://sites.ecmwf.int/repository/ecland/tests/2.0/insitu_US-Ha1_1991-1996/surfclim_US-Ha1_1991-1996.nc --output surfclim_US-Ha1_1991-1996.nc.download
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0 76 29851   76 22943    0     0  63815      0 --:--:-- --:--:-- --:--:-- 63730100 29851  100 29851    0     0  67706      0 --:--:-- --:--:-- --:--:-- 67689
++ mv surfclim_US-Ha1_1991-1996.nc.download surfclim_US-Ha1_1991-1996.nc
+Download completed
+File is available in LOCATION: /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input/surfclim_US-Ha1_1991-1996.nc
++ /path/to/work/ecland/build/share/ecland/scripts/ecland_run_model.sh -s US-Ha1_1991-1996 -b /path/to/work/ecland/build/bin/ecland-master-dp -w /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/work -o /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/output -f /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input -i /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input -F insitu -n /path/to/work/ecland/tests/insitu_US-Ha1_1991-1996/namelist
+STA: US-Ha1_1991-1996
+WORKDIR: /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/work
+OUTPUTDIR: /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/output
+FORCINGDIR: /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input
+INICLMDIR: /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input
+FORCINGTYPE: insitu
+NAMELIST: /path/to/work/ecland/tests/insitu_US-Ha1_1991-1996/namelist
+RUN CMF: false
+NLOOP: 1
+total 80K
+drwxrwxr-x 3 pad pad 4.0K Sep 30 18:48 ..
+-rw-rw-r-- 1 pad pad 8.4K Sep 30 18:48 input
+lrwxrwxrwx 1 pad pad  101 Sep 30 18:48 forcing -> /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input/met_insituHT_US-Ha1_1991-1996.nc
+-rw-rw-r-- 1 pad pad  22K Sep 30 18:48 soilinit
+drwxrwxr-x 2 pad pad 4.0K Sep 30 18:48 .
+-rw-rw-r-- 1 pad pad  30K Sep 30 18:48 surfclim
+---------------------------------------------
+Executable built:  /path/to/work/ecland/build/bin/ecland-master-dp
+Forcing:           /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/input/met_insituHT_US-Ha1_1991-1996.nc
+Rundir:            /path/to/work/ecland/build/ecland/tests/insitu_US-Ha1_1991-1996_dp/work/RUN/US-Ha1_1991-1996
+RLOOP / NLOOP:     1 / 1
+---------------------------------------------
+*******************************************************************************
+ECLAND START
+
++ + export OMP_NUM_THREADS=8
++ mpirun -np 1 /path/to/work/ecland/build/bin/ecland-master-dp 
+
+*******************************************************************************
+
+      Start 240: ecland_test_2D_EU-001_20220101-20220102_dp
+ 2/10 Test #240: ecland_test_2D_EU-001_20220101-20220102_dp .....***Timeout 1500.05 sec
+ 1/10 Test #239: ecland_test_insitu_US-Ha1_1991-1996_dp .........***Timeout 1500.06 sec
+ 2/10 Test #240: ecland_test_2D_EU-001_20220101-20220102_dp .....***Timeout 1500.05 sec
+ 3/10 Test #241: ecland_ifsbench_v1_EU_default_dp ...............***Not Run   0.00 sec
+	239 - ecland_test_insitu_US-Ha1_1991-1996_dp (Timeout)
+	240 - ecland_test_2D_EU-001_20220101-20220102_dp (Timeout)

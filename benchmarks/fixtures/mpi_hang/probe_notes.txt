@@ -1,0 +1,5 @@
+$ timeout 20 mpirun -np 1 hostname
+(no output; process did not exit after SIGTERM, had to be killed with SIGKILL)
+
+$ OMPI_MCA_oob_tcp_if_include=lo OMPI_MCA_btl_tcp_if_include=lo OMPI_MCA_btl=self,vader timeout -s KILL 20 mpirun -np 1 hostname
+Killed   (exit 137)

@@ -1,0 +1,14 @@
+$ ls -l /path/to/work/ecland/build/ecland/tests/ifsbench/
+drwxrwxr-x CMakeFiles
+-rw-rw-r-- CTestTestfile.cmake
+-rw-rw-r-- Makefile
+-rw-rw-r-- arch.yaml
+-rw-rw-r-- cmake_install.cmake
+-rw-rw-r-- custom_launchers.yaml
+lrwxrwxrwx ifsbench_run.py -> /path/to/work/ecland/build/ecland/tests/ifsbench/ifsbench_venv/bin/ifsbench_run.py
+drwxrwxr-x ifsbench_venv
+-rw-rw-r-- test_2d_gl_t21_dp.yaml
+-rw-rw-r-- test_v1_EU_dp.yaml
+
+$ ls /path/to/work/ecland/build/ecland/tests/ifsbench/ifsbench_venv/bin/
+Activate.ps1  activate  activate.csh  activate.fish  pip  pip3  pip3.12  python  python3  python3.12

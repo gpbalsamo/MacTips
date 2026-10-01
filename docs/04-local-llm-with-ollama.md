@@ -124,8 +124,39 @@ privacy implications in [09](09-security-and-safe-agent-use.md).
 
 | Tier | Candidate families to try | Status |
 |------|---------------------------|--------|
-| SMALL | small general / coding models in the 7B–9B range | not yet benchmarked |
+| SMALL | small general / coding models in the 7B–9B range | first results below |
 | MEDIUM | recent open coding models in the ~20B–35B range (dense or mixture-of-experts) | not yet benchmarked |
+
+### First results (RTX node, October 2026)
+
+Measured with
+[`scripts/benchmark_ollama_agent.py`](../scripts/benchmark_ollama_agent.py) on
+the RTX node ([11](11-rtx-linux-node.md)): 6 agent tasks built from real ecLand
+build and test failures, each run 3 times (temperature 0.3, 16k context,
+Q4_K_M, all fully on the GPU). Each task has a deterministic validator. "With
+evidence" counts only passes where the model read at least one file.
+
+| Model | PASS | PASS with evidence | Notes |
+|-------|------|--------------------|-------|
+| `qwen2.5-coder:14b` | 7/18 | 5/18 | Escalated correctly 3/3; read a long validation log correctly 2/3 |
+| `lfm2.5:8b` (8B MoE, ~1B active) | 4/18 | 2/18 | Fast, but often answered after one directory listing |
+| `qwen2.5-coder:7b` | 2/18 | 0/18 | Chose `relax_tolerance` instead of escalating, 3/3 |
+
+Observed across all three:
+
+- **Repository navigation failed 0/18**: invented paths, repeated identical
+  searches, or stopped early.
+- **Diagnosis stopped at the surface error** (a symlink named in the ctest
+  message) instead of the missing file behind it, 0/9.
+- Passes without reading any file occurred; a PASS alone does not show the
+  model worked from evidence.
+
+What this supports: none of these models is ready to explore a repository on
+its own. The 14B model is a candidate for narrow roles (reading a log,
+recognising when to escalate) behind a small fixed set of actions
+([06](06-hybrid-scientific-assistant.md),
+[08](08-frontier-assisted-specialisation.md)). This is a small sample (6 tasks,
+3 repeats, one prompt style); treat it as a first measurement, not a ranking.
 
 Record results in machine-readable form with
 [`scripts/benchmark_local_agent.py`](../scripts/benchmark_local_agent.py) and
