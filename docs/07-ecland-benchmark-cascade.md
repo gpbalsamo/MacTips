@@ -127,8 +127,8 @@ Suggested progression of *agent* tasks (to be built), from simple to hard:
 A first set of these tasks (build diagnosis, log reading, repository
 navigation, failure escalation) exists in
 [`scripts/benchmark_ollama_agent.py`](../scripts/benchmark_ollama_agent.py),
-with fixtures in `benchmarks/fixtures/` taken from real ecLand failures. First
-results are in [04](04-local-llm-with-ollama.md#first-results-rtx-node-october-2026).
+with fixtures in `benchmarks/fixtures/` taken from real ecLand failures. Results
+are in [04](04-local-llm-with-ollama.md#results-so-far-rtx-node-october-2026).
 
 Frontier-assisted improvement of these results is covered in
 [08](08-frontier-assisted-specialisation.md).

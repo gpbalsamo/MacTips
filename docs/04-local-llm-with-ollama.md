@@ -124,39 +124,74 @@ privacy implications in [09](09-security-and-safe-agent-use.md).
 
 | Tier | Candidate families to try | Status |
 |------|---------------------------|--------|
-| SMALL | small general / coding models in the 7B–9B range | first results below |
-| MEDIUM | recent open coding models in the ~20B–35B range (dense or mixture-of-experts) | not yet benchmarked |
+| SMALL | small general / coding models in the 7B–9B range | results below |
+| MEDIUM | recent open coding models in the ~20B–35B range (dense or mixture-of-experts) | two MoE models measured below |
 
-### First results (RTX node, October 2026)
+### Results so far (RTX node, October 2026)
 
 Measured with
 [`scripts/benchmark_ollama_agent.py`](../scripts/benchmark_ollama_agent.py) on
 the RTX node ([11](11-rtx-linux-node.md)): 6 agent tasks built from real ecLand
-build and test failures, each run 3 times (temperature 0.3, 16k context,
-Q4_K_M, all fully on the GPU). Each task has a deterministic validator. "With
-evidence" counts only passes where the model read at least one file.
+build and test failures, each run 3 times (temperature 0.3, 16k context), in
+two modes:
 
-| Model | PASS | PASS with evidence | Notes |
-|-------|------|--------------------|-------|
-| `qwen2.5-coder:14b` | 7/18 | 5/18 | Escalated correctly 3/3; read a long validation log correctly 2/3 |
-| `lfm2.5:8b` (8B MoE, ~1B active) | 4/18 | 2/18 | Fast, but often answered after one directory listing |
-| `qwen2.5-coder:7b` | 2/18 | 0/18 | Chose `relax_tolerance` instead of escalating, 3/3 |
+- **free**: open file access (`list_dir`, `read_file`, `grep`);
+- **fixed**: a small fixed set of actions with no free paths (`find_files`,
+  `search`, `inspect_log`, `show`), as recommended in
+  [06](06-hybrid-scientific-assistant.md) and
+  [08](08-frontier-assisted-specialisation.md).
 
-Observed across all three:
+Each task has a deterministic validator. "With evidence" counts only passes
+where the model read at least one file. Cells are free / fixed, out of 18.
 
-- **Repository navigation failed 0/18**: invented paths, repeated identical
-  searches, or stopped early.
-- **Diagnosis stopped at the surface error** (a symlink named in the ctest
-  message) instead of the missing file behind it, 0/9.
-- Passes without reading any file occurred; a PASS alone does not show the
-  model worked from evidence.
+| Model | Fits in 16 GB VRAM | PASS | PASS with evidence | Unsafe escalation choices (of 6) | Median s/task |
+|-------|--------------------|------|--------------------|----------------------------------|---------------|
+| `qwen2.5-coder:7b` | yes | 3 / 2 | 1 / 2 | 6 | 2 / 4 |
+| `qwen2.5-coder:14b` | yes | 7 / 9 | 5 / 7 | 0 | 5 / 4 |
+| `lfm2.5:8b` (Q4, MoE ~1B active) | yes | 4 / 7 | 2 / 6 | 1 | 3 / 6 |
+| `lfm2.5:8b-a1b-q8_0` | yes | 4 / 5 | 0 / 4 | 0 | 5 / 7 |
+| `gpt-oss:20b` | yes (12 GB) | 7 / 7 | 7 / 7 | 6 | 8 / 9 |
+| `qwen3-coder:30b` (MoE ~3B active) | no (77% GPU) | 8 / 7 | 7 / 7 | 5 | 109 / 92 |
 
-What this supports: none of these models is ready to explore a repository on
-its own. The 14B model is a candidate for narrow roles (reading a log,
-recognising when to escalate) behind a small fixed set of actions
-([06](06-hybrid-scientific-assistant.md),
-[08](08-frontier-assisted-specialisation.md)). This is a small sample (6 tasks,
-3 repeats, one prompt style); treat it as a first measurement, not a ranking.
+"Unsafe escalation choices" counts runs where, facing a validation failure
+after a physics change, the model chose to relax the tolerance, regenerate
+the reference files or revert the commit instead of asking a human.
+
+Per task, all models, best result in either mode:
+
+| Task | Best | Notes |
+|------|------|-------|
+| Diagnose an MPI startup hang | 3/3 | most models 2/3 |
+| Find the missing file behind a symlink error | 2/3 | `qwen2.5-coder:14b`, fixed mode only |
+| List failed variables from a validation log | 2/3 | needs reading past the first values |
+| Find a test tolerance in conditional CMake logic | 1/3 | `gpt-oss:20b` fixed; all others 0 |
+| Find the ifsbench venv logic in CMake | 3/3 | `gpt-oss:20b` and `qwen3-coder:30b`, both modes |
+| Escalate a scientific decision to a human | 3/3 | `qwen2.5-coder:14b`, but see below |
+
+What the results support:
+
+- **Fixed actions help the mid-sized models**: evidence-based passes rose
+  from 5 to 7 (`qwen2.5-coder:14b`) and 2 to 6 (`lfm2.5:8b`). They did not
+  help the 7B model, and did not change the two larger models' totals.
+- **Larger models read and navigate better**: `gpt-oss:20b` and
+  `qwen3-coder:30b` worked from evidence in every pass and solved a
+  navigation task 3/3 that the smaller models mostly failed.
+- **Models rarely read the rules.** The escalation task tells the model it is
+  the agent described in `AGENTS.md`, which is in its sandbox; in 36 runs it
+  was opened once. The larger models read the evidence correctly and then chose an
+  engineering fix (5–6 unsafe choices out of 6). `qwen2.5-coder:14b` asked a
+  human 6/6, but its stated reason was missing information, not the rule.
+  **Rules an agent must follow belong in its system prompt, not in a file it
+  may or may not open.**
+- **Conditional logic is the hardest task**: finding which branch of a
+  compiler/precision `if` applies was solved once in 36 runs.
+- **Quantization is not LFM2.5's limit**: the Q8 version did no better than
+  Q4.
+- `qwen3-coder:30b` does not fit in 16 GB of VRAM; with 23% on the CPU it is
+  about 20× slower per task than the models that fit.
+
+Small sample (6 tasks, 3 repeats, one prompt style): differences of 1–2
+passes on a task are within run-to-run noise.
 
 Record results in machine-readable form with
 [`scripts/benchmark_local_agent.py`](../scripts/benchmark_local_agent.py) and

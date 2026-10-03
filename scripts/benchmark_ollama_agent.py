@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """Benchmark local Ollama models as tool-using agents on real ecLand tasks.
 
-Each task gives the model a question, a read-only sandbox directory and three
-tools (list_dir, read_file, grep). The model explores with the tools and ends
-with one JSON object. A deterministic validator, written from ground truth
-checked by a human, decides PASS/FAIL. The model never grades itself.
+Each task gives the model a question, a read-only sandbox directory and a set
+of tools, and the model ends with one JSON object. A deterministic validator,
+written from ground truth checked by a human, decides PASS/FAIL. The model
+never grades itself. Two tool sets (--mode):
+
+    free   list_dir, read_file, grep: open-ended file access
+    fixed  find_files, search, inspect_log, show: a small fixed set of
+           actions with no free paths (docs/06, docs/08 stage A)
 
     THE LLM CHOOSES ACTIONS. TOOLS PERFORM ACTIONS. VALIDATORS DECIDE PASS/FAIL.
 
@@ -23,6 +27,7 @@ navigation tasks need an ecLand checkout, given with --ecland.
 Usage:
     python3 scripts/benchmark_ollama_agent.py --model qwen2.5-coder:7b \\
         --ecland ~/ecland --repeats 3 --output results.jsonl
+    python3 scripts/benchmark_ollama_agent.py --mode fixed --model ... (same options)
 
 Standard library only. Talks to Ollama at http://127.0.0.1:11434 and sends
 nothing anywhere else. Read-only: the tools cannot write, execute or leave
@@ -68,6 +73,8 @@ class Sandbox:
 
     def list_dir(self, path: str = ".") -> str:
         p = self.resolve(path)
+        if not p.exists():
+            return "error: no such file or directory: %s" % path
         if not p.is_dir():
             return "error: not a directory: %s" % path
         entries = sorted(p.iterdir(), key=lambda e: e.name)
@@ -77,6 +84,8 @@ class Sandbox:
 
     def read_file(self, path: str, start_line: int = 1, max_lines: int = 200) -> str:
         p = self.resolve(path)
+        if not p.exists():
+            return "error: no such file or directory: %s" % path
         if not p.is_file():
             return "error: not a file: %s" % path
         lines = p.read_text(errors="replace").splitlines()
@@ -99,6 +108,8 @@ class Sandbox:
 
     def grep(self, pattern: str, path: str = ".") -> str:
         p = self.resolve(path)
+        if not p.exists():
+            return "error: no such file or directory: %s" % path
         try:
             rx = re.compile(pattern, re.IGNORECASE)
         except re.error as exc:
@@ -119,6 +130,90 @@ class Sandbox:
                 continue
         return "\n".join(hits) or "(no matches)"
 
+    # -- fixed actions (--mode fixed): no free paths, whole-sandbox scope ----
+
+    def _files(self) -> List[Path]:
+        return [f for f in sorted(self.root.rglob("*"))
+                if f.is_file() and not any(part in SKIP_DIRS
+                                           for part in f.relative_to(self.root).parts)]
+
+    def find_files(self, name: str) -> str:
+        key = (name or "").strip().lower()
+        hits = [str(f.relative_to(self.root)) for f in self._files()
+                if key in f.name.lower()]
+        if not hits:
+            return "no file name contains %r anywhere in the sandbox" % name
+        more = "\n... (%d more; use a longer name)" % (len(hits) - 40) if len(hits) > 40 else ""
+        return "\n".join(hits[:40]) + more
+
+    def search(self, text: str) -> str:
+        key = (text or "").strip().lower()
+        if not key:
+            return "error: empty search text"
+        hits = []
+        for f in self._files():
+            try:
+                for n, line in enumerate(f.read_text(errors="replace").splitlines(), 1):
+                    if key in line.lower():
+                        hits.append("%s:%d: %s" % (f.relative_to(self.root), n, line.strip()[:160]))
+            except (OSError, UnicodeError):
+                continue
+        if not hits:
+            return "no line contains %r anywhere in the sandbox; try a shorter word" % text
+        more = "\n... (%d more matches; use more specific text)" % (len(hits) - 40) \
+            if len(hits) > 40 else ""
+        return "\n".join(hits[:40]) + more
+
+    def inspect_log(self, file: str) -> str:
+        p = self.resolve(file)
+        if not p.is_file():
+            return "error: no such file: %s (use find_files)" % file
+        keep = re.compile(LOG_MARKERS, re.IGNORECASE)
+        out = []
+        for n, line in enumerate(p.read_text(errors="replace").splitlines(), 1):
+            if keep.search(line):
+                out.append("%d: %s" % (n, line.strip()[:160]))
+        return "\n".join(out) or "(no status, error or verdict lines found)"
+
+    def show(self, file: str, line: int = 1, context: int = 12) -> str:
+        line, context = int(line), min(int(context), 40)
+        return self.read_file(file, start_line=max(line - context, 1), max_lines=2 * context + 1)
+
+
+SKIP_DIRS = (".git", "build", "source", "install")
+
+# Lines kept by inspect_log: test status, errors, verdicts, process kills,
+# symlinks and listings. Generic log triage, not tuned to any one answer.
+LOG_MARKERS = (r"Test\s+#|tests passed|Passed|Failed|FAILED|SUCCESS|Timeout|Not Run|"
+               r"Unable to|error|Killed|exit=|Validat|tolerance|->|^\$ |^\+ mpirun")
+
+FIXED_TOOL_SPECS = [
+    {"type": "function", "function": {
+        "name": "find_files",
+        "description": "Find files anywhere in the sandbox whose name contains the text.",
+        "parameters": {"type": "object", "properties": {
+            "name": {"type": "string"}}, "required": ["name"]}}},
+    {"type": "function", "function": {
+        "name": "search",
+        "description": "Find lines containing the text (case-insensitive) in every file "
+                       "of the sandbox. Returns file:line: text.",
+        "parameters": {"type": "object", "properties": {
+            "text": {"type": "string"}}, "required": ["text"]}}},
+    {"type": "function", "function": {
+        "name": "inspect_log",
+        "description": "Summarise a log file: only its test status, error, verdict and "
+                       "command lines, with line numbers.",
+        "parameters": {"type": "object", "properties": {
+            "file": {"type": "string"}}, "required": ["file"]}}},
+    {"type": "function", "function": {
+        "name": "show",
+        "description": "Show the lines of a file around a line number.",
+        "parameters": {"type": "object", "properties": {
+            "file": {"type": "string"},
+            "line": {"type": "integer"},
+            "context": {"type": "integer", "description": "lines either side, default 12"}},
+            "required": ["file", "line"]}}},
+]
 
 TOOL_SPECS = [
     {"type": "function", "function": {
@@ -273,8 +368,8 @@ SYSTEM = (
 # --------------------------------------------------------------------------
 
 
-def chat(model: str, messages: list, options: dict, timeout: int) -> dict:
-    body = json.dumps({"model": model, "messages": messages, "tools": TOOL_SPECS,
+def chat(model: str, messages: list, options: dict, timeout: int, specs: list) -> dict:
+    body = json.dumps({"model": model, "messages": messages, "tools": specs,
                        "stream": False, "options": options}).encode()
     req = urllib.request.Request(OLLAMA, data=body, headers={"Content-Type": "application/json"})
     with urllib.request.urlopen(req, timeout=timeout) as r:
@@ -305,8 +400,11 @@ def top_level_objects(text: str) -> List[dict]:
         i = end
 
 
+TOOL_NAMES = {s["function"]["name"] for s in TOOL_SPECS + FIXED_TOOL_SPECS}
+
+
 def _is_tool_call(obj: dict) -> bool:
-    return obj.get("name") in ("list_dir", "read_file", "grep") and "arguments" in obj
+    return obj.get("name") in TOOL_NAMES and "arguments" in obj
 
 
 def parse_json_answer(text: str) -> Optional[dict]:
@@ -321,15 +419,22 @@ def content_tool_calls(text: str) -> list:
             for o in top_level_objects(text) if _is_tool_call(o)]
 
 
-def run_agent(model: str, task: dict, sandbox: Sandbox, options: dict,
-              max_steps: int, timeout: int) -> Tuple[Optional[dict], int, List[str], str]:
+def run_agent(model: str, task: dict, sandbox: Sandbox, options: dict, max_steps: int,
+              timeout: int, mode: str) -> Tuple[Optional[dict], int, List[str], str]:
     messages = [{"role": "system", "content": SYSTEM},
                 {"role": "user", "content": task["prompt"]}]
-    tools: Dict[str, Callable[..., str]] = {
-        "list_dir": sandbox.list_dir, "read_file": sandbox.read_file, "grep": sandbox.grep}
+    if mode == "fixed":
+        specs = FIXED_TOOL_SPECS
+        tools: Dict[str, Callable[..., str]] = {
+            "find_files": sandbox.find_files, "search": sandbox.search,
+            "inspect_log": sandbox.inspect_log, "show": sandbox.show}
+    else:
+        specs = TOOL_SPECS
+        tools = {"list_dir": sandbox.list_dir, "read_file": sandbox.read_file,
+                 "grep": sandbox.grep}
     trace: List[str] = []
     for step in range(1, max_steps + 1):
-        msg = chat(model, messages, options, timeout)["message"]
+        msg = chat(model, messages, options, timeout, specs)["message"]
         calls = msg.get("tool_calls") or content_tool_calls(msg.get("content", ""))
         if not calls:
             return parse_json_answer(msg.get("content", "")), step, trace, msg.get("content", "")
@@ -356,7 +461,8 @@ def run_task(name: str, model: str, repeat: int, ecland: Optional[Path], args) -
     task = TASKS[name]
     root = FIXTURES / task["root"].split(":", 1)[1] if task["root"].startswith("fixture:") \
         else ecland
-    record = {"task": name, "task_type": task["type"], "model": model, "repeat": repeat,
+    record = {"task": name, "task_type": task["type"], "model": model, "mode": args.mode,
+              "repeat": repeat,
               "status": FAIL, "runtime_seconds": 0.0, "required_escalation": False,
               "steps": 0, "tool_calls": [], "answer": None, "notes": ""}
     if root is None or not root.is_dir():
@@ -367,7 +473,7 @@ def run_task(name: str, model: str, repeat: int, ecland: Optional[Path], args) -
     start = time.perf_counter()
     try:
         answer, steps, trace, raw = run_agent(model, task, Sandbox(root), options,
-                                              args.max_steps, args.timeout)
+                                              args.max_steps, args.timeout, args.mode)
         record.update(steps=steps, tool_calls=trace, answer=answer)
         if answer is None:
             record["notes"] = "no JSON answer: " + raw[:300]
@@ -392,6 +498,9 @@ def main(argv: List[str]) -> int:
     p.add_argument("--num-ctx", type=int, default=16384)
     p.add_argument("--max-steps", type=int, default=12)
     p.add_argument("--timeout", type=int, default=300, help="seconds per model call")
+    p.add_argument("--mode", choices=["free", "fixed"], default="free",
+                   help="free: list_dir/read_file/grep; fixed: find_files/search/"
+                        "inspect_log/show (no free paths)")
     p.add_argument("--output", help="append JSON-lines records to this file")
     args = p.parse_args(argv)
     ecland = args.ecland.expanduser().resolve() if args.ecland else None
@@ -402,14 +511,15 @@ def main(argv: List[str]) -> int:
             for r in range(1, args.repeats + 1):
                 rec = run_task(name, model, r, ecland, args)
                 records.append(rec)
-                print("%-5s %-20s %-26s r%d %6.1fs steps=%-2d %s" % (
-                    rec["status"], model, name, r, rec["runtime_seconds"], rec["steps"],
+                print("%-5s %-5s %-20s %-26s r%d %6.1fs steps=%-2d %s" % (
+                    rec["status"], args.mode, model, name, r, rec["runtime_seconds"],
+                    rec["steps"],
                     rec["notes"][:110]), flush=True)
                 if args.output:
                     with open(os.path.expanduser(args.output), "a") as fh:
                         fh.write(json.dumps(rec) + "\n")
 
-    print("\nSummary (PASS / runs):")
+    print("\nSummary (PASS / runs), mode=%s:" % args.mode)
     for model in args.model:
         mine = [r for r in records if r["model"] == model and r["status"] != "SKIP"]
         per = {}
