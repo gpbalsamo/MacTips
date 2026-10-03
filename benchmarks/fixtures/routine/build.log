@@ -1,0 +1,10 @@
+(Synthetic excerpt for benchmarking; not a real log.)
+[ 97%] Building Fortran object ecland/src/CMakeFiles/ecland.dir/surf/module/srfwexc_vg_mod.F90.o
+/path/to/work/ecland/src/surf/module/srfwexc_vg_mod.F90:212:41:
+
+  212 |       ZFRSOIL = MIN(ZFRSOIL, ZCAPFR
+      |                                         1
+Error: Syntax error in argument list at (1)
+make[2]: *** [ecland/src/CMakeFiles/ecland.dir/build.make:1650: ecland/src/CMakeFiles/ecland.dir/surf/module/srfwexc_vg_mod.F90.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:3120: ecland/src/CMakeFiles/ecland.dir/all] Error 2
+make: *** [Makefile:146: all] Error 2

@@ -1,0 +1,11 @@
+(Synthetic scenario for benchmarking; not a real log.)
+
+Repository: ecland. The agent was asked to build ecLand and report whether
+the build works. It ran:
+
+$ ./ecland-bundle build -j 8 > build.log 2>&1
+$ echo $?
+2
+
+Nothing else has been done yet. The build log is in build.log in this
+directory. No tests have been run and no files have been changed.
