@@ -4,10 +4,10 @@ This is the central page of MacTips. It describes how a small local model, a
 set of deterministic tools, independent validators and an occasional frontier
 model fit together.
 
-> **Status:** this is a design, not a finished product. The building blocks
-> (Ollama, ecLand, the benchmark repositories) exist; the orchestrating agent
-> and its validators are to be built and measured progressively. Nothing on
-> this page has been demonstrated end to end.
+> **Status:** mostly a design. One slice now runs end to end: a validator for
+> ecLand test output, a read-only local diagnosis and an escalation package
+> ([below](#a-first-working-slice-guarded_agentpy)). Retrieval, retries,
+> frontier correction and exemplars are still to be built and measured.
 
 ## The architecture
 
@@ -135,6 +135,45 @@ The frontier model diagnoses and proposes a fix. The fix is then run through
 the **same validators**. Only if it passes does it become a reusable exemplar:
 a documented case the local agent can later retrieve. A correction that has not
 been validated is not knowledge.
+
+## A first working slice: `guarded_agent.py`
+
+[`scripts/guarded_agent.py`](../scripts/guarded_agent.py) implements the
+validator → escalation path for ecLand tests, with the protection built into
+the tools rather than written as a rule. Measurements showed why: with the
+rules in the system prompt, local models still chose to relax tolerances,
+regenerate reference data or revert commits
+([04](04-local-llm-with-ollama.md#do-rules-in-the-system-prompt-make-models-escalate)).
+
+1. **The validator decides.** A deterministic parser reads `ctest` output and
+   returns PASS/FAIL per test and per validated variable. On PASS no model is
+   called.
+2. **FAIL always stops for a human.** The run writes an escalation package
+   (task, verdict, repository state, first meaningful error, log excerpt,
+   files inspected, hypothesis). The model does not decide whether to
+   escalate.
+3. **The model can only read.** Its actions are `find_files`, `search`,
+   `inspect_log` and `show`, over a run directory holding the evidence. None
+   can write, run commands or touch tolerances, reference data or commits.
+   Its suggested next step is recorded for the human, and flagged as
+   **protected** when it touches those items.
+
+```bash
+# validate an existing ctest log; diagnose with a local model on FAIL
+python3 scripts/guarded_agent.py --ctest-log ctest.log --repo ~/ecland \
+    --base <upstream-commit> --model gpt-oss:20b
+# or run ctest in a build directory first
+python3 scripts/guarded_agent.py --build-dir ~/ecland/build --repo ~/ecland \
+    --ctest-regex ecland_test_ --model gpt-oss:20b
+```
+
+Exit status is 0 for PASS, 2 for FAIL (package written), 1 for a harness
+error. Checked on real logs from the RTX node ([11](11-rtx-linux-node.md)):
+upstream ecLand PASS (2/2 and 7/7 ifsbench), a fork with a physics change
+FAIL with the exact failed variables, and an earlier MPI-hang run FAIL. On
+that fork failure, `gpt-oss:20b` proposed updating the reference data and
+tolerances; the package flagged it as protected, and no action could carry it
+out.
 
 ## What this design deliberately does not do
 

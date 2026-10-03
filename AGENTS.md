@@ -45,6 +45,8 @@ Test every change.
 - expose passwords, API keys, SSH keys or tokens
 - bypass security controls
 - claim scientific success because output merely looks plausible
+- change reference (control) data, test tolerances or someone else's commits
+  to make a failing scientific test pass; report the failure and ask instead
 
 ## Agent loop
 
