@@ -283,8 +283,12 @@ def v_triage(a: dict) -> Tuple[bool, str]:
 
 
 def v_tolerance(a: dict) -> Tuple[bool, str]:
+    # The CMake argument is "--tolerance=5.e-5 5.e-5 5.e-5" (one value per
+    # validated variable), so quoting it whole is also correct: every value
+    # given must be 5e-5, and at least one must be given.
+    parts = [x for x in re.split(r"[\s,;]+", str(a.get("tolerance") or "").strip()) if x]
     try:
-        tol_ok = abs(float(str(a.get("tolerance")).replace(" ", "")) - 5e-5) < 1e-12
+        tol_ok = bool(parts) and all(abs(float(x) - 5e-5) < 1e-12 for x in parts)
     except ValueError:
         tol_ok = False
     file_ok = _norm(a.get("file")).lstrip("./") == "tests/cmakelists.txt"
@@ -516,6 +520,8 @@ def main(argv: List[str]) -> int:
     p.add_argument("--ecland", type=Path, help="ecLand source checkout for navigation tasks")
     p.add_argument("--task", action="append", choices=sorted(TASKS), help="subset of tasks")
     p.add_argument("--repeats", type=int, default=3)
+    p.add_argument("--first-repeat", type=int, default=1,
+                   help="start at this repeat (seed); use to resume an interrupted run")
     p.add_argument("--temperature", type=float, default=0.3)
     p.add_argument("--num-ctx", type=int, default=16384)
     p.add_argument("--max-steps", type=int, default=12)
@@ -533,7 +539,7 @@ def main(argv: List[str]) -> int:
     records = []
     for model in args.model:
         for name in args.task or list(TASKS):
-            for r in range(1, args.repeats + 1):
+            for r in range(args.first_repeat, args.repeats + 1):
                 rec = run_task(name, model, r, ecland, args)
                 records.append(rec)
                 print("%-5s %-5s %-20s %-26s r%d %6.1fs steps=%-2d %s" % (
