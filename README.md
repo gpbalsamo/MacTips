@@ -47,7 +47,7 @@ Each level is useful on its own.
 The ecLand ladder runs from cheap to expensive: build + `ctest` → one
 [PLUMBER2](https://github.com/gpbalsamo/plumber2-ecland) site → LIAISE smoke test
 ([liaise-ecland](https://github.com/gpbalsamo/liaise-ecland)) → short global
-[WFDE5](https://github.com/gpbalsamo/wfde5-ecland) test → CaMa-Flood → HPC. Build
+[WFDE5](https://github.com/gpbalsamo/globoland-hydro/tree/main/ecland) test → CaMa-Flood → HPC. Build
 steps come from [ecLand4U](https://github.com/gpbalsamo/ecLand4U).
 
 Hardware examples (laptop, Mac mini node, and a Linux/WSL2 RTX node for CUDA
