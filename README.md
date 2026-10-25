@@ -56,6 +56,12 @@ inference and small training) are in
 [11](docs/11-rtx-linux-node.md). None replaces large-scale training or
 production HPC.
 
+Prototypes under [`experiments/`](experiments/), RTX node only and not
+benchmarked: a [local voice assistant](experiments/voice-assistant/README.md)
+(speech output works; microphone input is blocked by WSLg) and a
+[Judge → Escalate → Verify](experiments/jev-assistant/README.md) router between
+local models with deterministic checks.
+
 ## Safety
 
 Agents that run commands can do damage, and frontier escalation can send

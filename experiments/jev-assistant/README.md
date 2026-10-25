@@ -112,6 +112,16 @@ reasoning, substantial coding work, complexity/long prompts, uncertainty and
 unsupported-claim phrases. They are conservative English-language heuristics,
 not a complete intent classifier or factuality detector. Potential action/tool
 requests are blocked before generation to avoid pretending they were performed.
+Removal/overwrite wording counts only with a file-like object ("remove the
+folder data/", `rm notes.txt`, `rm *.log`, `rmdir build`), so "remove duplicates
+from a list" or "what does rm do?" are not treated as actions.
+
+Known limitation: a *question* about a destructive command ("What is the
+difference between git reset and git revert?") is blocked as `ASK_USER`. This is
+deliberate rather than fixed: any useful answer names the command, and the
+command-safety lint rejects answers containing it, so letting the question
+through would only end at the frontier placeholder after two model loads.
+Keyword checks cannot tell "explains `git reset`" from "tells you to run it".
 
 For ordinary answers, the local critic assesses concrete defects: completeness,
 unsupported claims, contradictions, complexity and missing evidence, not merely
@@ -152,8 +162,10 @@ subset: primitive `type`, object `properties`/`required`/boolean
 ```
 
 Unsupported keywords fail closed. JSON checks reject duplicate keys and nonfinite
-numbers. Mentioning JSON in the prompt infers JSON format when no explicit
-contract is supplied; explicit code-return phrases can infer Python. Automatic
+numbers. JSON format is inferred only from an explicit output request ("return
+only JSON", "reply in JSON", "as JSON", "valid JSON", "JSON only"), not from
+merely mentioning JSON, so "Explain what JSON is" gets a plain-text answer.
+Explicit code-return phrases can infer Python. Automatic
 inference does not recover arbitrary natural-language schemas: use `--schema`
 or `--require` for deterministic requirements.
 
@@ -229,6 +241,19 @@ Real local Ollama tests on RTXG:
 The memory-heavy 27B/30B routes, paid services, HPC, voice integration and
 microphone remain untested and unimplemented here. No packages/models were
 installed and no Windows/WSL settings changed for JEV development.
+
+### Update (2026-10-25, after review)
+
+Fixed two pattern defects, with tests (27 JEV tests now pass):
+
+- Any prompt mentioning JSON was forced into JSON output, so a correct prose
+  answer to "Explain what JSON is in one sentence." failed as `invalid_json`.
+  Live check after the fix: 7B → 14B critic ACCEPT_LOCAL → PASS → plain-text
+  answer, exit 0, about 31 s.
+- "Remove all files in my home directory." and `rm <path>` without a flag were
+  not flagged as destructive. Both are now `ASK_USER`, while "what does rm do?",
+  "remove duplicates from a list" and "remove everything after the comma" are
+  not.
 
 ## Next extension
 

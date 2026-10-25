@@ -28,10 +28,17 @@ def arithmetic(prompt):
             '*': lambda: a * b, '/': lambda: a / b}[op]()
 
 
+# JSON output is inferred only from an explicit output request, so a question
+# *about* JSON ("Explain what JSON is") still gets a plain-text answer.
+JSON_REQUEST = re.compile(
+    r'\b(?:return|reply|respond|output|give|produce|emit)\b[^.?!\n]{0,40}\bjson\b'
+    r'|\bas\s+(?:valid\s+|strict\s+)?json\b|\bjson\s+only\b|\bvalid\s+json\b', re.I)
+
+
 def infer_contract(prompt, contract=None):
     if contract is not None:
         return contract
-    if re.search(r'\bjson\b', prompt, re.I):
+    if JSON_REQUEST.search(prompt):
         return Contract(format='json')
     if re.search(r'(?:only|valid|return|write)\s+(?:a\s+)?python (?:code|function|script)', prompt, re.I):
         return Contract(format='python')

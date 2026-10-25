@@ -168,6 +168,39 @@ class PipelineTests(unittest.TestCase):
         self.assertGreater(logged['total_latency_seconds'], 0)
         self.assertEqual(path.stat().st_mode & 0o777, 0o600)
 
+    def test_json_contract_only_when_json_output_is_requested(self):
+        from jev.verify import infer_contract
+        # Questions about JSON must stay plain text, or a correct prose answer fails.
+        for prompt in ('Explain what JSON is in one sentence.',
+                       'What is the difference between JSON and YAML?',
+                       'Why does JSON forbid trailing commas?',
+                       'How do I format dates in JSON?'):
+            self.assertEqual(infer_contract(prompt).format, 'text', prompt)
+        # Explicit output requests, including the README examples, still infer JSON.
+        for prompt in ('Return only JSON with an answer field containing 4.',
+                       'Return only JSON matching the schema.',
+                       'Reply in JSON.', 'Give the result as JSON.',
+                       'Output a JSON object with a name field.',
+                       'Respond with valid JSON only.', 'JSON only, please: list two colours.'):
+            self.assertEqual(infer_contract(prompt).format, 'json', prompt)
+        result = self.run_assistant('Explain what JSON is in one sentence.',
+                                    fast='JSON is a text format for structured data.')
+        self.assertEqual(result['outcome'], 'ANSWER')
+        self.assertNotIn('invalid_json', result['verification_result']['failures'])
+
+    def test_removal_wording_is_treated_as_destructive(self):
+        from jev.judge import deterministic
+        for prompt in ('Remove all files in my home directory.', 'Please remove the folder data/.',
+                       'rm ~/notes.txt', 'rm *.log', 'rm -r build/', 'rm *', 'rmdir build', 'Format my disk.',
+                       'Overwrite the files in output/.'):
+            self.assertEqual(deterministic(prompt).recommended_action, Action.ASK_USER, prompt)
+        # Ordinary uses of the same words are not actions on the user's files.
+        for prompt in ('Remove duplicates from a Python list.', 'How do I format a date in Python?',
+                       'Explain the term confirmation bias.', 'What does rm do in Unix?',
+                       'Explain the rm command.', 'Remove everything after the comma.',
+                       'Remove the first item from my list.'):
+            self.assertNotEqual(deterministic(prompt).recommended_action, Action.ASK_USER, prompt)
+
 
 class ValidationTests(unittest.TestCase):
     def test_json_schema_and_malformed_json(self):

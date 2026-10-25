@@ -16,7 +16,15 @@ def signals(prompt, answer=''):
             r'\b(delete|erase|wipe|purchase|buy|send (?:an? |the |my )?(?:email|message)|'
             r'modify (?:my |the )?calendar|schedule (?:a |the )?meeting|'
             r'change (?:system|windows|wsl) configuration|submit .*job|trigger .*job|'
-            r'rm\s+-|git\s+(?:reset|clean)|force.?push|sbatch|qsub)\b', prompt),
+            r'rm\s+-|git\s+(?:reset|clean)|force.?push|sbatch|qsub)\b'
+            # Removal/overwrite needs a file-like object, so "remove duplicates
+            # from a list" or "format a date" are not treated as actions.
+            r'|\b(?:remove|overwrite)\b[^.?!\n]{0,30}\b(?:files?|folders?|director(?:y|ies)|'
+            r'disk|drive|home)\b'
+            # rm only with a path-like argument, so "what does rm do?" stays a question.
+            r'|(?:^|[\s;&|`$(])rm\s+(?:-\S+\s+)*(?:~|\.{0,2}/|[\w.*-]*/|[\w*-]+\.\w|\*)'
+            r'|\brmdir\s+\S'
+            r'|\bformat\b[^.?!\n]{0,20}\b(?:disk|drive|partition)\b', prompt),
         'current_information': has(r'\b(latest|current|today|right now|live (?:data|weather)|'
                                    r'web search|search (?:the )?(?:web|internet)|browse|look up)\b', prompt),
         'tool_required': has(r'\b(run|execute|compile|install|open|inspect|read)\b.*'
