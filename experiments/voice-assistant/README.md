@@ -193,7 +193,7 @@ claims. Do not infer scientific correctness from the assistant's answer.
   transcribed in-memory Piper speech exactly: "The local speech recognition
   test is working." This synthetic test does not establish real-microphone
   recognition accuracy.
-- BLOCKED: WSLg `RDPSource` capture returned zero frames in bounded tests.
+- BLOCKED (resolved 2026-10-27, see below): WSLg `RDPSource` capture returned zero frames in bounded tests.
   Windows did not recognise the AirPods microphone. Microphone-to-answer
   operation remains unverified; speaker playback works independently.
 - PASS: all 11 dependency-free tests rerun before committing the prototype.
@@ -202,3 +202,24 @@ Packages and model assets were provisioned with user approval after the initial
 checks. Models, virtual environments, caches, recordings and local credentials
 are excluded from version control; only source, tests and setup documentation
 belong in the prototype commit. No Windows/WSL configuration was changed.
+
+### Microphone working with an OBSBOT camera (2026-10-27)
+
+- With an OBSBOT Meet 2 camera microphone on its original firmware, opening the
+  WSLg microphone froze the WSL audio server: after at most one successful
+  capture, `pactl info` stopped responding and every later capture or playback
+  hung until `wsl --shutdown`. This reproduced on WSLg 1.0.73.2 and, after
+  `wsl --update` (WSL 3.0.3), on WSLg 1.0.79, with Windows microphone access
+  allowed. Windows-side Python capture of the same microphone also failed (MME
+  stalled, DirectSound delivered digital silence).
+- After an **OBSBOT firmware update**, three consecutive bounded 3 s WSLg
+  captures returned real audio (peaks 3,340 to 20,690 of 32,767) and the audio
+  server kept responding after each.
+- PASS (user-confirmed): the full push-to-talk loop, microphone through
+  faster-whisper, Ollama and Piper to speech output.
+- Audio device checks and device listing now give up after 15 s with a
+  "restart WSL" message instead of hanging if the WSLg audio server is frozen
+  (12 dependency-free tests pass).
+- If the microphone freezes WSL audio again with another device, check the
+  device firmware first. A Windows-side capture bridge was built and then
+  removed once the firmware update made it unnecessary.

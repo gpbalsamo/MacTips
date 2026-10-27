@@ -87,6 +87,19 @@ class VoiceTests(unittest.TestCase):
         va.check_audio(sd, None, None, microphone=False)
         sd.check_input_settings.assert_not_called()
 
+    def test_frozen_audio_server_fails_fast(self):
+        import threading
+        import time
+        hang = threading.Event()
+        started = time.monotonic()
+        with self.assertRaisesRegex(va.AssistantError, 'wsl --shutdown'):
+            va.call_with_timeout(hang.wait, 0.2, 'Audio device check')
+        self.assertLess(time.monotonic() - started, 2)
+        hang.set()
+        self.assertEqual(va.call_with_timeout(lambda: 7, 1, 'x'), 7)
+        with self.assertRaisesRegex(RuntimeError, 'boom'):
+            va.call_with_timeout(Mock(side_effect=RuntimeError('boom')), 1, 'x')
+
     def test_text_mode_needs_no_audio_or_speech_dependencies(self):
         with patch.object(va, 'audio_module', side_effect=AssertionError('audio touched')):
             with patch.object(va, 'ollama_answer', return_value=iter(['Only answer.'])):

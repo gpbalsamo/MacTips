@@ -163,12 +163,41 @@ def device_arg(value):
     return int(value) if value and value.isdecimal() else value
 
 
+AUDIO_CHECK_SECONDS = 15
+
+
+def call_with_timeout(function, seconds, what):
+    """Run a call that can block forever when the WSLg audio server is frozen."""
+    result, error = [], []
+
+    def target():
+        try:
+            result.append(function())
+        except Exception as exc:  # re-raised in the caller's thread
+            error.append(exc)
+
+    worker = threading.Thread(target=target, daemon=True)
+    worker.start()
+    worker.join(seconds)
+    if worker.is_alive():
+        raise AssistantError(f'{what} did not respond within {seconds:g}s; the WSLg audio '
+                             'server is probably frozen. Restart WSL from Windows '
+                             '(wsl --shutdown) and try again.')
+    if error:
+        raise error[0]
+    return result[0] if result else None
+
+
 def check_audio(sd, input_device, output_device, microphone=True):
-    try:
+    def check():
         if microphone:
             sd.check_input_settings(device=input_device, channels=1,
                                     dtype='float32', samplerate=16000)
         sd.check_output_settings(device=output_device, channels=1, dtype='int16')
+    try:
+        call_with_timeout(check, AUDIO_CHECK_SECONDS, 'Audio device check')
+    except AssistantError:
+        raise
     except Exception as exc:
         raise AssistantError(f'Audio device check failed: {exc}. Run --list-devices, '
                              'select --input-device/--output-device, and check '
@@ -294,7 +323,8 @@ def main(argv=None):
         if args.list_devices:
             sd = audio_module()
             try:
-                devices = sd.query_devices()
+                devices = call_with_timeout(sd.query_devices, AUDIO_CHECK_SECONDS,
+                                            'Audio device listing')
                 if not devices:
                     raise AssistantError('No audio devices found; check WSLg audio routing.')
                 print(devices)
