@@ -60,7 +60,8 @@ Prototypes under [`experiments/`](experiments/), RTX node only and not
 benchmarked: a [local voice assistant](experiments/voice-assistant/README.md)
 (push-to-talk loop verified with an OBSBOT camera microphone) and a
 [Judge → Escalate → Verify](experiments/jev-assistant/README.md) router between
-local models with deterministic checks.
+local models with deterministic checks, and a repository-local
+[OpenCode setup](experiments/opencode/README.md) using local Ollama models only.
 
 ## Safety
 
